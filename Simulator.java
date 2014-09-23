@@ -10,7 +10,7 @@ public class Simulator {
 		final Random random = new Random(); //create a random object
 
 		//Simulator create a new restaurant
-		Restaurant restaurant = new Restaurant();
+		final Restaurant restaurant = new Restaurant();
 
 		//Restaurant in session
 		timer.scheduleAtFixedRate(new TimerTask() {
@@ -27,12 +27,15 @@ public class Simulator {
 
 				//generate client based on probability
 				if(random.nextInt(2) == 1) {
+					//generate new client
 					Client newClient = cf.generateClient();
+					System.out.println("New Client generated: " + newClient.getName());
 
-					if((Restaurant.numberOfClients <= 20) && (Restaurant.numberOfClients + newClient.friends + 1) <= 20) {
-						Restaurant.numberOfClients += (1 + newClient.friends);
-
-						System.out.println(Restaurant.numberOfClients);
+					//check if restaurant is not full
+					if(restaurant.isAvailableTable()) {
+						restaurant.serveNewClient(newClient);
+					} else {
+						System.out.println("No seat available for " + newClient.getName());
 					}
 				}		
 			}

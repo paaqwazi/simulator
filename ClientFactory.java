@@ -10,22 +10,22 @@ public class ClientFactory{
 		for(int i = 0; i < clientList.length; i++)
 			clientList[i] = new Client();
 
-		clientList[0].name = "Richard Barnes";
-		clientList[1].name = "Panin Tenkorang";
-		clientList[2].name = "Benjamin Kissi";
-		clientList[3].name = "Casssandra Sarfo";
-		clientList[4].name = "Samuel Amoah";
-		clientList[5].name = "Samson Kuber";
-		clientList[6].name = "Jerry King";
-		clientList[7].name = "Philip Nunoo";
-		clientList[8].name = "Derek Frimpong";
-		clientList[9].name = "Moses Krieger";
+		clientList[0].setName("Richard Barnes");
+		clientList[1].setName("Panin Tenkorang");
+		clientList[2].setName("Benjamin Kissi");
+		clientList[3].setName("Casssandra Sarfo");
+		clientList[4].setName("Samuel Amoah");
+		clientList[5].setName("Samson Kuber");
+		clientList[6].setName("Jerry King");
+		clientList[7].setName("Philip Nunoo");
+		clientList[8].setName("Derek Frimpong");
+		clientList[9].setName("Moses Krieger");
 	}
 
 	public Client generateClient() {
 		Random random = new Random();
 		int index = random.nextInt(clientList.length);
-		clientList[index].friends = random.nextInt(4);
+		clientList[index].setFriends(random.nextInt(4));
 		return clientList[index];
 	}
 }
