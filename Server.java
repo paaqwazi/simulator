@@ -21,6 +21,5 @@ public class Server {
 
 	public void sendMeal(Meal meal, Client client) {
 		client.eat(meal);
-		client.payBill(meal.getPrice());
 	}
 }

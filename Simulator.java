@@ -1,44 +1,59 @@
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Random;
+import java.util.Scanner;
 
 public class Simulator {
-
-	public static void main(String args[]){
-		final int hours = Integer.parseInt(args[0]) * 60 * 60 * 1000; //convert input to hours
-		final Timer timer = new Timer();			//create new timer object
-		final Random random = new Random(); //create a random object
-
-		//Simulator create a new restaurant
+	public static void main(String args[]) {
+		final Timer timer = new Timer();
+		final Scanner input = new Scanner(System.in);
+		final Random random = new Random();
 		final Restaurant restaurant = new Restaurant();
+		final ClientFactory cf = new ClientFactory();
+		final long time = Integer.parseInt(args[0]) * 100 * 60;
+		int t = Integer.parseInt(args[0]);
+		while(t < 1 || t > 7) {
+			System.out.print("Time > 7 hours. Enter new time: ");
+			t = input.nextInt();
+		}
 
-		//Restaurant in session
 		timer.scheduleAtFixedRate(new TimerTask() {
-			long prev = System.currentTimeMillis(); //store start time
-			ClientFactory cf = new ClientFactory();
+			long prev = System.currentTimeMillis();
 			public void run() {
 
-				//check if restaurant is still open: if program time is 7 hours.
-				if((System.currentTimeMillis() - prev) == hours) {
+				if((System.currentTimeMillis() - prev) > time) {
 					this.cancel();
 					timer.cancel();
+					restaurant.cleanUp();
+					restaurant.printSummary();
 					return;
 				}
 
-				//generate client based on probability
-				if(random.nextInt(2) == 1) {
-					//generate new client
-					Client newClient = cf.generateClient();
-					System.out.println("New Client generated: " + newClient.getName());
+				int options = random.nextInt(5) + 1;
 
-					//check if restaurant is not full
-					if(restaurant.isAvailableTable()) {
-						restaurant.serveNewClient(newClient);
-					} else {
-						System.out.println("No seat available for " + newClient.getName());
-					}
-				}		
+				switch(options) {
+					case 1: //creates a client based on a random figure
+						if(random.nextInt(2) == 1) {
+							Client client = cf.generateClient();
+							if(!restaurant.isFull())
+								restaurant.addClient(client);
+							else System.out.printf("%s was rejected. Restaurant full.\n", client.getName());
+						}
+						break;
+					case 2:
+						restaurant.chooseMenu();
+						break;
+					case 3:
+						restaurant.takeMenu();
+						break;
+					case 4:
+						restaurant.prepareMeal();
+						break;
+					case 5:
+						restaurant.clientLeaves();
+						break;
+				}
 			}
-		}, 0, 5000);
+		}, 0, 100);
 	}
 }
